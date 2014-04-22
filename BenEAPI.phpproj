@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Name>BenEAPI</Name>
+    <ProjectGuid>{07d3878e-9bb7-477a-b4d6-6f86fb3461f2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>BenEAPI</RootNamespace>
+    <!-- important to be opened by PHP Tools, when also Phalanger Tools are installed -->
+    <ProjectTypeGuids>{A0786B88-2ADB-4C21-ABE8-AA2D79766269}</ProjectTypeGuids>
+    <AssemblyName>BenEAPI</AssemblyName>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <IncludeDebugInformation>true</IncludeDebugInformation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <IncludeDebugInformation>false</IncludeDebugInformation>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="benconfig.php">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EAPI_Classes\AccountModel.php">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EAPI_Classes\BrandModel.php">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EAPI_Classes\CategoryModel.php">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EAPI_Classes\ClientModel.php">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EAPI_Classes\GenreModel.php">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EAPI_Classes\OpportunityModel.php">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EAPI_Classes\PlacementModel.php">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EAPI_Classes\VehicleModel.php">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="index.php" />
+    <Compile Include="TestPage\dateSelector.php">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestPage\index.php">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestPage\timer.php">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="EAPI_Classes" />
+    <Folder Include="TestPage" />
+    <Folder Include="TestPage\css" />
+    <Folder Include="TestPage\js" />
+    <Folder Include="TestPage\img" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestPage\css\bootstrap-responsive.css">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="TestPage\css\bootstrap-responsive.min.css">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="TestPage\css\bootstrap.css">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="TestPage\css\bootstrap.min.css">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="TestPage\css\ext-styles.css">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="TestPage\img\favicon.ico">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="TestPage\img\glyphicons-halflings-white.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="TestPage\img\glyphicons-halflings.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="TestPage\img\loader.gif">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="TestPage\js\bootstrap.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="TestPage\js\bootstrap.min.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="TestPage\js\displayTable.js">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
+</Project>

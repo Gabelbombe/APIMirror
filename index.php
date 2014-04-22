@@ -167,8 +167,10 @@ define("utf8_encode_all", array_key_exists("utf8", $_GET));
 
 
 // we need to check for a layout
-if (!array_key_exists("layout", $_GET))
+if (! array_key_exists("layout", $_GET))
 {
+    echo 'Available: ' . implode(', ', array_keys($config['layout_keys']));
+
     build_error_and_die("layout must be specified", "-1");
 }
 
@@ -184,7 +186,7 @@ try {
 	$modelname = $config["layout_keys"][$layout];
 	// load the matching EAPI class file for $modelname
 	// class dependencies require including all the class files
-	loadfile("EAPI_CLASSES/$modelname.php");
+	loadfile("EAPI_Classes/$modelname.php");
 	$model = new $modelname();
 	if (DEBUG)
 	{
@@ -252,7 +254,7 @@ try {
 	}
 	if (DEBUG) { println("total query time: ".(microtime(true) - $query_start)); }
 
-	// ahh! lollipop! yay!!!
+	// ahh! lollipop! yay!!! <-- you're an idiot....
 	//echo var_dump($result);
 	//echo var_dump(htmlspecialchars ($result));
 	// var_dump($result); exit();
@@ -273,10 +275,13 @@ catch(Exception $ex) {
 
 
 
-
-
-
 // Helper Functions
+/**
+ * Wow... thats hacky as hell....
+ *
+ * @param $error
+ * @param $code
+ */
 function build_error_and_die($error, $code)
 {
     global $connection;
@@ -406,52 +411,52 @@ function clean_string($result)
 	return $cleaned;
 }
 
-function abstraction_query_multi_array($err_code, $sql)
+function abstraction_query_multi_array($conn, $sql)
 {
-    global $connection;
+    global $connection; // this is stupid
+    $conn = $connection;
 
-    if (DEBUG){ println("running sql: $sql"); }
-    if (DEBUG){ $query_start = microtime(true); }
-    $query_result = odbc_exec($connection, $sql);
-    if($query_result === false)
+    if (DEBUG)
     {
-        $code = odbc_error($connection);
-        $msg = odbc_errormsg($connection);
-        build_error_and_die("unable to run queries, odbc error: ".
-                      "[error code: $code] $msg", $err_code);
+        echo "running sql: $sql";
+        $start = microtime(1);
     }
-    if (DEBUG){ println("query to run sql: ".(microtime(true) - $query_start)); }
 
-	if (DEBUG) { $counter = 0; }
-	$result = array();
-	while(($obj = odbc_fetch_array($query_result)) != false)
+    $res = odbc_exec($conn, $sql);
+
+    if(false === $res)
+        Throw New Exception("Enable to run queries, ODBC error.
+            \nCode: " . odbc_error($conn) . "
+            \nErr:  " . odbc_errormsg($conn)
+        );
+
+
+    if (DEBUG)
+    {
+        echo "query to run sql: ".(microtime(1) - $start);
+        $counter = 0;
+    }
+
+	$data = array();
+	while(false !== ($obj = odbc_fetch_array($res)))
 	{
-		if (DEBUG) {
-			$counter++;
-			if ($counter % 100 == 0) {
-				println("got $counter records");
-			}
-		}
-		$result[] = $obj;
+        if (DEBUG && (0 === ++$counter % 100)) "got $counter records";
+
+        $data[] = $obj;
 	}
 
-	odbc_free_result($query_result);
+	odbc_free_result($res);
 
+	if (false === $data)
+        Throw New ErrorException("Object not found [SQL: $sql]");
 
-	if ($result === false)
-	{
-		build_error_and_die("object not found [sql:$sql]", $err_code);
-	}
-
-	return $result;
+	return $data;
 }
 
 function collide_object($extending, $odbc_array)
 {
-	foreach($odbc_array as $key => $value)
-	{
+	foreach($odbc_array AS $key => $value)
 		$extending->$key = $value;
-	}
 }
 
 function shift_object_key($object, $dest, $key)
@@ -460,6 +465,11 @@ function shift_object_key($object, $dest, $key)
 	unset($object->$key);
 }
 
+/**
+ * Why is this even a function.....
+ *
+ * @param $msg
+ */
 function println($msg)
 {
     echo "$msg<br />\n";
@@ -496,11 +506,12 @@ function build_talent($id, $name, $role, $q_score) {
 }
 
 function loadFile($filename) {
-	if(file_exists("./$filename")) {
-		include "./$filename";
+	if(file_exists("$filename")) {
+		include "$filename";
 	} else {
-		println("Cannot load file: $filename");
-		die();
+
+        echo "$filename";
+//		println("Cannot load file: $filename");
 	}
 }
 
